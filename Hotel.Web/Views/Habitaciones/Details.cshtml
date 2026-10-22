@@ -1,0 +1,25 @@
+@model Habitacion
+@{
+    ViewData["Title"] = "Detalle de habitación";
+}
+
+<h1 class="h3 mb-4">Habitación @Model.Numero</h1>
+
+<dl class="row col-lg-6">
+    <dt class="col-sm-4">Número</dt>
+    <dd class="col-sm-8">@Model.Numero</dd>
+    <dt class="col-sm-4">Tipo</dt>
+    <dd class="col-sm-8">@Model.TipoHabitacion.Nombre</dd>
+    <dt class="col-sm-4">Precio por noche</dt>
+    <dd class="col-sm-8">S/ @Model.TipoHabitacion.PrecioNoche.ToString("N2")</dd>
+    <dt class="col-sm-4">Estado</dt>
+    <dd class="col-sm-8">@(Model.Activo ? "Activa" : "De baja")</dd>
+</dl>
+
+<div class="d-flex gap-2">
+    @if (Model.Activo)
+    {
+        <a asp-action="Edit" asp-route-id="@Model.HabitacionId" class="btn btn-primary">Editar</a>
+    }
+    <a asp-action="Index" class="btn btn-outline-secondary">Volver</a>
+</div>

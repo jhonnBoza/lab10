@@ -1,0 +1,59 @@
+@model IEnumerable<Habitacion>
+@{
+    ViewData["Title"] = "Habitaciones";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Habitaciones</h1>
+    <a asp-action="Create" class="btn btn-primary">Nueva habitación</a>
+</div>
+
+<form method="get" asp-action="Index" class="row g-2 mb-4">
+    <div class="col-md-4">
+        <label class="form-label" for="tipoHabitacionId">Tipo de habitación</label>
+        <select id="tipoHabitacionId" name="tipoHabitacionId" class="form-select" asp-items="ViewBag.TiposFiltro">
+            <option value="">Todos</option>
+        </select>
+    </div>
+    <div class="col-md-auto d-flex align-items-end gap-2">
+        <button type="submit" class="btn btn-outline-primary">Filtrar</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Ver todas</a>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Número</th>
+                <th>Tipo</th>
+                <th>Precio por noche</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="4" class="text-muted">No hay habitaciones activas para mostrar.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var habitacion in Model)
+                {
+                    <tr>
+                        <td>@habitacion.Numero</td>
+                        <td>@habitacion.TipoHabitacion.Nombre</td>
+                        <td>S/ @habitacion.TipoHabitacion.PrecioNoche.ToString("N2")</td>
+                        <td class="text-end">
+                            <a asp-action="Details" asp-route-id="@habitacion.HabitacionId" class="btn btn-sm btn-outline-secondary">Detalles</a>
+                            <a asp-action="Edit" asp-route-id="@habitacion.HabitacionId" class="btn btn-sm btn-outline-primary">Editar</a>
+                            <a asp-action="Delete" asp-route-id="@habitacion.HabitacionId" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

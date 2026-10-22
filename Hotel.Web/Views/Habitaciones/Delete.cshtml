@@ -1,0 +1,22 @@
+@model Habitacion
+@{
+    ViewData["Title"] = "Dar de baja habitación";
+}
+
+<h1 class="h3 mb-3">Dar de baja la habitación</h1>
+<p>La habitación <strong>@Model.Numero</strong> (@Model.TipoHabitacion.Nombre) dejará de mostrarse en el listado. El registro se conserva.</p>
+
+<dl class="row col-lg-6">
+    <dt class="col-sm-4">Número</dt>
+    <dd class="col-sm-8">@Model.Numero</dd>
+    <dt class="col-sm-4">Tipo</dt>
+    <dd class="col-sm-8">@Model.TipoHabitacion.Nombre</dd>
+    <dt class="col-sm-4">Precio por noche</dt>
+    <dd class="col-sm-8">S/ @Model.TipoHabitacion.PrecioNoche.ToString("N2")</dd>
+</dl>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="HabitacionId" />
+    <button type="submit" class="btn btn-danger">Dar de baja</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+</form>

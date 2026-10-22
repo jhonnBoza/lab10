@@ -1,0 +1,74 @@
+@model IEnumerable<Habitacion>
+@{
+    ViewData["Title"] = "Disponibilidad";
+    var ingreso = ViewData["Ingreso"] as DateOnly?;
+    var salida = ViewData["Salida"] as DateOnly?;
+    var noches = ViewData["Noches"] as int?;
+    var ingresoTexto = ingreso?.ToString("yyyy-MM-dd");
+    var salidaTexto = salida?.ToString("yyyy-MM-dd");
+}
+
+<h1 class="h3 mb-4">Disponibilidad</h1>
+
+<form method="get" asp-action="Disponibles" class="row g-2 mb-4">
+    <div class="col-md-3">
+        <label class="form-label" for="ingreso">Fecha de ingreso</label>
+        <input type="date" id="ingreso" name="ingreso" value="@ingresoTexto" class="form-control" />
+    </div>
+    <div class="col-md-3">
+        <label class="form-label" for="salida">Fecha de salida</label>
+        <input type="date" id="salida" name="salida" value="@salidaTexto" class="form-control" />
+    </div>
+    <div class="col-md-auto d-flex align-items-end">
+        <button type="submit" class="btn btn-primary">Consultar</button>
+    </div>
+</form>
+
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+@if (noches is null)
+{
+    <p class="text-muted">Indique el ingreso y la salida para ver las habitaciones libres.</p>
+}
+else if (!Model.Any())
+{
+    <p class="text-muted">No hay habitaciones libres para @noches noche@(noches == 1 ? "" : "s").</p>
+}
+else
+{
+    <p class="text-muted">@noches noche@(noches == 1 ? "" : "s"). El total estimado usa el precio por noche del tipo de habitación.</p>
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>Número</th>
+                    <th>Tipo</th>
+                    <th>Precio por noche</th>
+                    <th>Noches</th>
+                    <th>Total estimado</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var habitacion in Model)
+                {
+                    var total = noches.Value * habitacion.TipoHabitacion.PrecioNoche;
+                    <tr>
+                        <td>@habitacion.Numero</td>
+                        <td>@habitacion.TipoHabitacion.Nombre</td>
+                        <td>S/ @habitacion.TipoHabitacion.PrecioNoche.ToString("N2")</td>
+                        <td>@noches</td>
+                        <td>S/ @total.ToString("N2")</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-primary"
+                               asp-action="Create"
+                               asp-route-habitacionId="@habitacion.HabitacionId"
+                               asp-route-fechaIngreso="@ingresoTexto"
+                               asp-route-fechaSalida="@salidaTexto">Reservar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="mb-4">
+    <h1 class="display-6">Reservas de hotel</h1>
+    <p class="lead text-muted">Consulte habitaciones activas, revise la disponibilidad por fechas y registre reservas.</p>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h2 class="h5 card-title">Habitaciones</h2>
+                <p class="card-text">Alta, edición y baja lógica de las habitaciones del hotel.</p>
+                <a class="btn btn-primary" asp-controller="Habitaciones" asp-action="Index">Ver habitaciones</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h2 class="h5 card-title">Disponibilidad</h2>
+                <p class="card-text">Habitaciones libres entre dos fechas, con noches y total estimado.</p>
+                <a class="btn btn-primary" asp-controller="Reservas" asp-action="Disponibles">Consultar</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h2 class="h5 card-title">Reservas</h2>
+                <p class="card-text">Listado de reservas y cancelación de las pendientes o confirmadas.</p>
+                <a class="btn btn-primary" asp-controller="Reservas" asp-action="Index">Ver reservas</a>
+            </div>
+        </div>
+    </div>
+</div>

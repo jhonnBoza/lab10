@@ -1,0 +1,55 @@
+@model Reserva
+@{
+    ViewData["Title"] = "Nueva reserva";
+    var ingreso = Model.FechaIngreso == default ? "" : Model.FechaIngreso.ToString("yyyy-MM-dd");
+    var salida = Model.FechaSalida == default ? "" : Model.FechaSalida.ToString("yyyy-MM-dd");
+}
+
+<h1 class="h3 mb-4">Nueva reserva</h1>
+
+<form asp-action="Create" method="post" class="col-lg-6">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+    <div class="mb-3">
+        <label asp-for="HuespedId" class="form-label">Huésped</label>
+        <select asp-for="HuespedId" class="form-select" asp-items="ViewBag.Huespedes">
+            <option value="0">Seleccione un huésped</option>
+        </select>
+        <span asp-validation-for="HuespedId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="HabitacionId" class="form-label">Habitación</label>
+        <select asp-for="HabitacionId" class="form-select" asp-items="ViewBag.Habitaciones">
+            <option value="0">Seleccione una habitación</option>
+        </select>
+        <span asp-validation-for="HabitacionId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="FechaIngreso" class="form-label">Fecha de ingreso</label>
+        <input asp-for="FechaIngreso" class="form-control" type="date" value="@ingreso" />
+        <span asp-validation-for="FechaIngreso" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="FechaSalida" class="form-label">Fecha de salida</label>
+        <input asp-for="FechaSalida" class="form-control" type="date" value="@salida" />
+        <span asp-validation-for="FechaSalida" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Observaciones" class="form-label">Observaciones</label>
+        <textarea asp-for="Observaciones" class="form-control" rows="3" maxlength="200"></textarea>
+        <span asp-validation-for="Observaciones" class="text-danger"></span>
+    </div>
+
+    <div class="mt-3 d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,71 @@
+@model IEnumerable<Reserva>
+@{
+    ViewData["Title"] = "Reservas";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Reservas</h1>
+    <a asp-action="Create" class="btn btn-primary">Nueva reserva</a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Huésped</th>
+                <th>Habitación</th>
+                <th>Ingreso</th>
+                <th>Salida</th>
+                <th>Noches</th>
+                <th>Estado</th>
+                <th>Total</th>
+                <th>Observaciones</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="9" class="text-muted">No hay reservas para mostrar.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var reserva in Model)
+                {
+                    var noches = reserva.FechaSalida.DayNumber - reserva.FechaIngreso.DayNumber;
+                    var total = noches * reserva.Habitacion.TipoHabitacion.PrecioNoche;
+                    var clase = reserva.Estado switch
+                    {
+                        "Pendiente" => "text-bg-warning",
+                        "Confirmada" => "text-bg-success",
+                        "Cancelada" => "text-bg-secondary",
+                        "Finalizada" => "text-bg-info",
+                        _ => "text-bg-light"
+                    };
+
+                    <tr>
+                        <td>@reserva.Huesped.Nombres @reserva.Huesped.Apellidos</td>
+                        <td>@reserva.Habitacion.Numero (@reserva.Habitacion.TipoHabitacion.Nombre)</td>
+                        <td>@reserva.FechaIngreso.ToString("dd/MM/yyyy")</td>
+                        <td>@reserva.FechaSalida.ToString("dd/MM/yyyy")</td>
+                        <td>@noches</td>
+                        <td><span class="badge @clase">@reserva.Estado</span></td>
+                        <td>S/ @total.ToString("N2")</td>
+                        <td>@(string.IsNullOrWhiteSpace(reserva.Observaciones) ? "—" : reserva.Observaciones)</td>
+                        <td class="text-end">
+                            @if (reserva.Estado is "Pendiente" or "Confirmada")
+                            {
+                                <form asp-action="Cancelar" asp-route-id="@reserva.ReservaId" method="post" class="d-inline"
+                                      onsubmit="return confirm('¿Cancelar esta reserva?');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Cancelar</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
